@@ -1,0 +1,67 @@
+$ g++ -std=c++17 -O2 -Wall -Wextra main.cpp service.cpp incident.cpp dependency_manager.cpp recovery_strategy.cpp persistence.cpp metrics.cpp simulator.cpp api_server.cpp -o ResiliX
+simulator.cpp:10:86: warning: multi-character character constant [-Wmultichar]
+   10 | std::string esc(const std::string& s) { std::string o; for(char c:s){ if(c=='\"'||c=='\\\\')o+='\\\\'; if(c=='\\n')o+="\\\\n"; else o+=c;} return o; }
+      |                                                                                      ^~~~~~
+simulator.cpp:10:96: warning: multi-character character constant [-Wmultichar]
+   10 | std::string esc(const std::string& s) { std::string o; for(char c:s){ if(c=='\"'||c=='\\\\')o+='\\\\'; if(c=='\\n')o+="\\\\n"; else o+=c;} return o; }
+      |                                                                                                ^~~~~~
+simulator.cpp:10:110: warning: multi-character character constant [-Wmultichar]
+   10 | std::string esc(const std::string& s) { std::string o; for(char c:s){ if(c=='\"'||c=='\\\\')o+='\\\\'; if(c=='\\n')o+="\\\\n"; else o+=c;} return o; }
+      |                                                                                                              ^~~~~
+simulator.cpp: In function ‘std::string {anonymous}::esc(const std::string&)’:
+simulator.cpp:10:84: warning: comparison is always false due to limited range of data type [-Wtype-limits]
+   10 | std::string esc(const std::string& s) { std::string o; for(char c:s){ if(c=='\"'||c=='\\\\')o+='\\\\'; if(c=='\\n')o+="\\\\n"; else o+=c;} return o; }
+      |                                                                                   ~^~~~~~~~
+simulator.cpp:10:96: warning: overflow in conversion from ‘int’ to ‘char’ changes value from ‘23644’ to ‘92’ [-Woverflow]
+   10 | std::string esc(const std::string& s) { std::string o; for(char c:s){ if(c=='\"'||c=='\\\\')o+='\\\\'; if(c=='\\n')o+="\\\\n"; else o+=c;} return o; }
+      |                                                                                                ^~~~~~
+simulator.cpp:10:108: warning: comparison is always false due to limited range of data type [-Wtype-limits]
+   10 | std::string esc(const std::string& s) { std::string o; for(char c:s){ if(c=='\"'||c=='\\\\')o+='\\\\'; if(c=='\\n')o+="\\\\n"; else o+=c;} return o; }
+      |                                                                                                           ~^~~~~~~
+simulator.cpp: In member function ‘void Simulator::persistIncident(const Incident&)’:
+simulator.cpp:47:49: warning: unused parameter ‘i’ [-Wunused-parameter]
+   47 | void Simulator::persistIncident(const Incident& i) {persistence_.rewriteIncidents(incidents_);}
+      |                                 ~~~~~~~~~~~~~~~~^
+simulator.cpp: At global scope:
+simulator.cpp:14:13: warning: ‘std::string {anonymous}::extract(const std::string&, const std::string&, const std::string&)’ defined but not used [-Wunused-function]
+   14 | std::string extract(const std::string& body,const std::string& key,const std::string& def="") {
+      |             ^~~~~~~
+api_server.cpp: In member function ‘int ApiServer::run()’:
+api_server.cpp:75:13: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   75 |             if(n<=0)break;raw.append(buf,n);headerEnd=raw.find("\r\n\r\n");
+      |             ^~
+api_server.cpp:75:27: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   75 |             if(n<=0)break;raw.append(buf,n);headerEnd=raw.find("\r\n\r\n");
+      |                           ^~~
+
+$ g++ -std=c++17 -O2 -Wall -Wextra tests.cpp service.cpp incident.cpp dependency_manager.cpp recovery_strategy.cpp persistence.cpp metrics.cpp simulator.cpp -o ResiliXTests
+simulator.cpp:10:86: warning: multi-character character constant [-Wmultichar]
+   10 | std::string esc(const std::string& s) { std::string o; for(char c:s){ if(c=='\"'||c=='\\\\')o+='\\\\'; if(c=='\\n')o+="\\\\n"; else o+=c;} return o; }
+      |                                                                                      ^~~~~~
+simulator.cpp:10:96: warning: multi-character character constant [-Wmultichar]
+   10 | std::string esc(const std::string& s) { std::string o; for(char c:s){ if(c=='\"'||c=='\\\\')o+='\\\\'; if(c=='\\n')o+="\\\\n"; else o+=c;} return o; }
+      |                                                                                                ^~~~~~
+simulator.cpp:10:110: warning: multi-character character constant [-Wmultichar]
+   10 | std::string esc(const std::string& s) { std::string o; for(char c:s){ if(c=='\"'||c=='\\\\')o+='\\\\'; if(c=='\\n')o+="\\\\n"; else o+=c;} return o; }
+      |                                                                                                              ^~~~~
+simulator.cpp: In function ‘std::string {anonymous}::esc(const std::string&)’:
+simulator.cpp:10:84: warning: comparison is always false due to limited range of data type [-Wtype-limits]
+   10 | std::string esc(const std::string& s) { std::string o; for(char c:s){ if(c=='\"'||c=='\\\\')o+='\\\\'; if(c=='\\n')o+="\\\\n"; else o+=c;} return o; }
+      |                                                                                   ~^~~~~~~~
+simulator.cpp:10:96: warning: overflow in conversion from ‘int’ to ‘char’ changes value from ‘23644’ to ‘92’ [-Woverflow]
+   10 | std::string esc(const std::string& s) { std::string o; for(char c:s){ if(c=='\"'||c=='\\\\')o+='\\\\'; if(c=='\\n')o+="\\\\n"; else o+=c;} return o; }
+      |                                                                                                ^~~~~~
+simulator.cpp:10:108: warning: comparison is always false due to limited range of data type [-Wtype-limits]
+   10 | std::string esc(const std::string& s) { std::string o; for(char c:s){ if(c=='\"'||c=='\\\\')o+='\\\\'; if(c=='\\n')o+="\\\\n"; else o+=c;} return o; }
+      |                                                                                                           ~^~~~~~~
+simulator.cpp: In member function ‘void Simulator::persistIncident(const Incident&)’:
+simulator.cpp:47:49: warning: unused parameter ‘i’ [-Wunused-parameter]
+   47 | void Simulator::persistIncident(const Incident& i) {persistence_.rewriteIncidents(incidents_);}
+      |                                 ~~~~~~~~~~~~~~~~^
+simulator.cpp: At global scope:
+simulator.cpp:14:13: warning: ‘std::string {anonymous}::extract(const std::string&, const std::string&, const std::string&)’ defined but not used [-Wunused-function]
+   14 | std::string extract(const std::string& body,const std::string& key,const std::string& def="") {
+      |             ^~~~~~~
+
+$ ./ResiliXTests
+All ResiliX backend regression tests passed.\n

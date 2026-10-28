@@ -1,0 +1,28 @@
+{
+  "thresholds": {
+    "latencyMs": 500,
+    "errorRatePct": 5,
+    "cpuPct": 90,
+    "memoryPct": 90
+  },
+  "recovery": {
+    "maxRetries": 3,
+    "baseBackoffMs": 100,
+    "maxBackoffMs": 800,
+    "maxRecoveriesPerService": 5,
+    "circuitFailureThreshold": 3,
+    "circuitResetAfterSuccesses": 2,
+    "cooldownMs": 0
+  },
+  "dependencies": [
+    {"upstream":"Database", "dependent":"Payment"},
+    {"upstream":"Payment", "dependent":"Order"},
+    {"upstream":"Inventory", "dependent":"Order"},
+    {"upstream":"Cache", "dependent":"Order"},
+    {"upstream":"Order", "dependent":"API Gateway"},
+    {"upstream":"Auth", "dependent":"API Gateway"}
+  ],
+  "apiPort": 8080,
+  "historyFile": "incidents.csv",
+  "metricsFile": "metrics.csv"
+}

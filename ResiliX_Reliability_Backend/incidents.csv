@@ -1,0 +1,8 @@
+id,service,description,severity,risk,status,strategy,created_at,resolved_at,recovery_ms,direct_impact,indirect_impact,unused1,unused2,unused3
+1,"API Gateway","Manual failure injection",LOW,20.44,RESOLVED,"restart","2026-10-27T15:41:54Z","2026-10-27T15:42:30Z",0,"","",,,
+2,"Payment","Manual failure injection",MEDIUM,43.8,RESOLVED,"restart","2026-10-27T16:18:11Z","2026-10-27T16:18:55Z",0,"Order","API Gateway",,,
+3,"Payment","Manual failure injection",MEDIUM,43.48,RESOLVED,"restart","2026-10-27T16:19:22Z","2026-10-27T16:20:06Z",0,"Order","API Gateway",,,
+4,"Payment","automated test",MEDIUM,43.8,RESOLVED,"restart","2026-10-28T05:37:37Z","2026-10-28T05:37:37Z",1,"Order","API Gateway",,,
+5,"Payment","automated test",MEDIUM,43.8,RESOLVED,"restart","2026-10-28T05:38:23Z","2026-10-28T05:38:23Z",1,"Order","API Gateway",,,
+6,"Payment","Automatic incident: health metrics crossed failure thresholds",CRITICAL,91,RESOLVED,"restart","2026-10-28T05:38:23Z","2026-10-28T07:13:18Z",1,"Order","API Gateway",,,
+7,"Payment","automated test",MEDIUM,43.8,RESOLVED,"restart","2026-10-28T06:33:29Z","2026-10-28T06:33:29Z",1,"Order","API Gateway",,,

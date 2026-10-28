@@ -1,0 +1,15 @@
+
+*.exe
+*.o
+*.obj
+*.dll
+build/
+bin/
+Debug/
+Release/
+.vscode/
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1220">
+  <title>ResiliX | Reliability Control Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="ResiliX home">
+        <span class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2.8 27 8.9v14.2L16 29.2 5 23.1V8.9L16 2.8Z" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m9 17 4.1 4 9-10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="brand-copy"><strong>resilix</strong><small>RELIABILITY PLATFORM</small></span>
+      </a>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="nav-list" aria-label="Main navigation">
+        <a class="nav-link active" href="#overview" data-page="overview"><span class="nav-icon">◫</span>Overview <span class="nav-indicator"></span></a>
+        <a class="nav-link" href="#services" data-page="services"><span class="nav-icon">▦</span>Services <span class="nav-count" id="navServiceCount">7</span></a>
+        <a class="nav-link" href="#incidents" data-page="incidents"><span class="nav-icon">◉</span>Incidents <span class="nav-count danger" id="navIncidentCount">—</span></a>
+        <a class="nav-link" href="#dependencies" data-page="dependencies"><span class="nav-icon">⌘</span>Dependencies</a>
+        <a class="nav-link" href="#recovery" data-page="recovery"><span class="nav-icon">↻</span>Recovery center</a>
+        <a class="nav-link" href="#metrics" data-page="metrics"><span class="nav-icon">⌁</span>Metrics & reports</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="environment-card">
+          <div class="env-top"><span class="pulse-dot"></span><span>SIMULATION ENVIRONMENT</span></div>
+          <p>ResiliX models service failures and recovery actions in a controlled environment.</p>
+          <span class="env-tag">LOCAL INSTANCE</span>
+        </div>
+        <div class="sidebar-user">
+          <div class="avatar">RX</div>
+          <div class="user-copy"><strong>Reliability team</strong><small>Administrator view</small></div>
+          <button class="icon-button small" id="settingsButton" title="Connection settings" aria-label="Connection settings">⚙</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button class="mobile-menu icon-button" id="mobileMenu" aria-label="Toggle navigation">☰</button>
+        <div class="breadcrumbs"><span>Workspace</span><span class="crumb-sep">/</span><strong id="breadcrumbPage">Overview</strong></div>
+        <div class="topbar-right">
+          <div class="connection-pill" id="connectionPill"><span class="status-dot"></span><span id="connectionText">Connecting to API</span></div>
+          <span class="top-divider"></span>
+          <span class="clock" id="clock">--:--:--</span>
+          <button class="icon-button" id="refreshButton" aria-label="Refresh data" title="Refresh data">↻</button>
+        </div>
+      </header>
+
+      <div class="content-wrap">
+        <section class="page-section active-page" id="overview">
+          <div class="page-heading">
+            <div><div class="eyebrow">RELIABILITY OPERATIONS <span class="eyebrow-line"></span></div><h1>Control center<span class="heading-period">.</span></h1><p class="page-subtitle">A live view of your simulated service landscape and recovery posture.</p></div>
+            <div class="heading-actions"><div class="last-updated">LAST SYNC <strong id="lastSync">Waiting for API</strong></div><button class="btn btn-secondary" id="evaluateButton"><span>↻</span> Evaluate health</button></div>
+          </div>
+          <div class="notice-bar"><span class="notice-icon">i</span><span><strong>Simulation mode</strong> — incidents, circuit-breaker behavior and recovery actions are modeled locally; no production services are controlled.</span><button class="notice-close" id="dismissNotice" aria-label="Dismiss notice">×</button></div>
+
+          <div class="stat-grid">
+            <article class="stat-card"><div class="stat-top"><span>Tracked services</span><span class="stat-symbol blue">▦</span></div><div class="stat-value" id="statServices">—</div><div class="stat-foot"><span class="tiny-bar"></span><span>Configured service nodes</span></div></article>
+            <article class="stat-card"><div class="stat-top"><span>Healthy services</span><span class="stat-symbol green">✓</span></div><div class="stat-value" id="statHealthy">—</div><div class="stat-foot"><span class="status-mini green-text">● Operational</span><span id="healthyPercent">—</span></div></article>
+            <article class="stat-card"><div class="stat-top"><span>Open incidents</span><span class="stat-symbol red">!</span></div><div class="stat-value" id="statOpen">—</div><div class="stat-foot"><span class="status-mini red-text">● Needs attention</span><span id="openSub">Across services</span></div></article>
+            <article class="stat-card"><div class="stat-top"><span>Mean recovery time</span><span class="stat-symbol violet">◷</span></div><div class="stat-value" id="statRecovery">—<small> ms</small></div><div class="stat-foot"><span class="tiny-bar violet-bar"></span><span>Resolved incidents only</span></div></article>
+          </div>
+
+          <div class="dashboard-grid">
+            <article class="panel service-panel">
+              <div class="panel-heading"><div><h2>Service health</h2><p>Current state across your service topology</p></div><a class="text-link" href="#services" data-page="services">View all services <span>↗</span></a></div>
+              <div class="service-table-wrap"><table class="data-table"><thead><tr><th>SERVICE</th><th>STATUS</th><th>LATENCY</th><th>ERROR RATE</th><th>CPU</th></tr></thead><tbody id="serviceTableBody"><tr><td colspan="5" class="loading-cell">Connecting to ResiliX API…</td></tr></tbody></table></div>
+              <div class="panel-footer"><span class="footer-muted" id="serviceTableFooter">Waiting for service data</span><a class="text-link" href="#services" data-page="services">Open service inventory →</a></div>
+            </article>
+            <article class="panel incident-panel">
+              <div class="panel-heading"><div><h2>Incident activity</h2><p>Most recent reliability events</p></div><a class="text-link" href="#incidents" data-page="incidents">View history <span>↗</span></a></div>
+              <div class="incident-list" id="recentIncidents"><div class="empty-state compact"><span class="empty-icon">✓</span><strong>No incident data yet</strong><p>Incidents will appear here after loading the API.</p></div></div>
+              <div class="panel-footer"><span class="footer-muted">History is stored by the backend</span></div>
+            </article>
+          </div>
+          <div class="bottom-grid">
+            <article class="panel topology-panel"><div class="panel-heading"><div><h2>Dependency overview</h2><p>Upstream services and their dependents</p></div><a class="text-link" href="#dependencies" data-page="dependencies">Explore graph ↗</a></div><div class="topology-preview" id="topologyPreview"><div class="topology-node core-node">Database <small>UPSTREAM</small></div><div class="topology-arrow">→</div><div class="topology-node">Payment <small>DEPENDENT</small></div><div class="topology-arrow">→</div><div class="topology-node">Order <small>DEPENDENT</small></div><div class="topology-arrow">→</div><div class="topology-node">API Gateway <small>EDGE</small></div></div><div class="topology-note"><span class="legend-dot"></span> Direction indicates upstream → dependent service</div></article>
+            <article class="panel quick-panel"><div class="panel-heading"><div><h2>Quick actions</h2><p>Run a controlled reliability operation</p></div></div><div class="quick-actions"><button class="quick-action" id="quickFailure"><span class="quick-action-icon red-bg">!</span><span><strong>Inject a failure</strong><small>Simulate a service outage</small></span><span class="quick-chevron">→</span></button><button class="quick-action" id="quickRecovery"><span class="quick-action-icon green-bg">↻</span><span><strong>Recover a service</strong><small>Run a recovery strategy</small></span><span class="quick-chevron">→</span></button><button class="quick-action" id="quickEvaluate"><span class="quick-action-icon blue-bg">⌁</span><span><strong>Evaluate all services</strong><small>Re-check health thresholds</small></span><span class="quick-chevron">→</span></button></div></article>
+          </div>
+        </section>
+
+        <section class="page-section" id="services">
+          <div class="page-heading"><div><div class="eyebrow">INVENTORY <span class="eyebrow-line"></span></div><h1>Service inventory<span class="heading-period">.</span></h1><p class="page-subtitle">Inspect health signals and submit controlled metric samples.</p></div><button class="btn btn-secondary" id="serviceRefresh">↻ Refresh inventory</button></div>
+          <div class="filter-row"><div class="search-box"><span>⌕</span><input id="serviceSearch" type="search" placeholder="Search services…" aria-label="Search services"></div><select id="serviceStatusFilter" aria-label="Filter service status"><option value="all">All statuses</option><option>HEALTHY</option><option>DEGRADED</option><option>FAILED</option><option>RECOVERING</option><option>OPEN_CIRCUIT</option></select><span class="filter-result" id="serviceFilterCount">— services</span></div>
+          <div class="service-card-grid" id="serviceCards"><div class="panel loading-panel">Waiting for service data…</div></div>
+        </section>
+
+        <section class="page-section" id="incidents">
+          <div class="page-heading"><div><div class="eyebrow">EVENT MANAGEMENT <span class="eyebrow-line"></span></div><h1>Incident history<span class="heading-period">.</span></h1><p class="page-subtitle">Prioritize events by impact, risk score and recovery state.</p></div><button class="btn btn-primary" id="newIncidentButton">＋ Inject failure</button></div>
+          <div class="stat-grid compact-stats"><article class="stat-card"><div class="stat-top"><span>Total incidents</span><span class="stat-symbol blue">◉</span></div><div class="stat-value" id="incTotal">—</div></article><article class="stat-card"><div class="stat-top"><span>Open / failed recovery</span><span class="stat-symbol red">!</span></div><div class="stat-value" id="incOpen">—</div></article><article class="stat-card"><div class="stat-top"><span>Resolved</span><span class="stat-symbol green">✓</span></div><div class="stat-value" id="incResolved">—</div></article><article class="stat-card"><div class="stat-top"><span>Critical incidents</span><span class="stat-symbol violet">▲</span></div><div class="stat-value" id="incCritical">—</div></article></div>
+          <div class="panel"><div class="panel-heading"><div><h2>Incident register</h2><p>Persisted events loaded from the backend history</p></div><div class="inline-filters"><select id="incidentStatusFilter" aria-label="Filter incident status"><option value="all">All states</option><option>OPEN</option><option>RECOVERING</option><option>RESOLVED</option><option>RECOVERY_FAILED</option></select><select id="incidentSeverityFilter" aria-label="Filter incident severity"><option value="all">All severity</option><option>CRITICAL</option><option>HIGH</option><option>MEDIUM</option><option>LOW</option></select></div></div><div class="table-scroll"><table class="data-table incident-table"><thead><tr><th>ID / SERVICE</th><th>SEVERITY</th><th>RISK</th><th>IMPACT</th><th>STATUS</th><th>CREATED</th><th>ACTION</th></tr></thead><tbody id="incidentTableBody"><tr><td colspan="7" class="loading-cell">Loading incidents…</td></tr></tbody></table></div></div>
+        </section>
+
+        <section class="page-section" id="dependencies">
+          <div class="page-heading"><div><div class="eyebrow">SERVICE TOPOLOGY <span class="eyebrow-line"></span></div><h1>Dependency map<span class="heading-period">.</span></h1><p class="page-subtitle">Understand how upstream failures can propagate to dependent services.</p></div><button class="btn btn-secondary" id="dependencyRefresh">↻ Refresh graph</button></div>
+          <div class="notice-bar subtle-notice"><span class="notice-icon">i</span><span>Arrows represent the configured <strong>upstream → dependent</strong> relationship. This is a dependency view, not live network traffic.</span></div>
+          <div class="panel graph-panel"><div class="panel-heading"><div><h2>Dependency topology</h2><p id="graphSummary">Loading configured relationships…</p></div><div class="graph-legend"><span><i class="legend-box healthy"></i> Service node</span><span><i class="legend-line"></i> Dependency</span></div></div><div class="graph-canvas" id="dependencyGraph"><div class="loading-panel">Loading dependency edges…</div></div></div>
+          <div class="panel dependency-table-panel"><div class="panel-heading"><div><h2>Dependency register</h2><p>Relationships returned by the backend</p></div></div><div class="table-scroll"><table class="data-table"><thead><tr><th>UPSTREAM SERVICE</th><th></th><th>DEPENDENT SERVICE</th></tr></thead><tbody id="dependencyTableBody"><tr><td colspan="3" class="loading-cell">Loading dependencies…</td></tr></tbody></table></div></div>
+        </section>
+
+        <section class="page-section" id="recovery">
+          <div class="page-heading"><div><div class="eyebrow">REMEDIATION <span class="eyebrow-line"></span></div><h1>Recovery center<span class="heading-period">.</span></h1><p class="page-subtitle">Execute bounded recovery simulations and verify the resulting health state.</p></div></div>
+          <div class="recovery-layout"><div class="panel recovery-form-panel"><div class="panel-heading"><div><h2>Recovery operation</h2><p>Choose an affected service and strategy</p></div><span class="form-step">01 / ACTION</span></div><form id="recoveryForm" class="stack-form"><label for="recoveryService">Target service</label><select id="recoveryService" required><option value="">Loading services…</option></select><label for="recoveryStrategy">Recovery strategy</label><select id="recoveryStrategy"><option value="restart">Restart simulation</option><option value="retry">Retry with backoff</option><option value="failover">Failover simulation</option><option value="fallback">Fallback simulation</option></select><div class="strategy-explainer" id="strategyExplainer"><strong>Restart simulation</strong><p>Models a bounded restart attempt and checks the resulting service health.</p></div><button class="btn btn-primary btn-wide" type="submit">Run recovery <span>→</span></button><p class="form-footnote">Actions are simulated; no real process is restarted.</p></form></div><div class="panel recovery-guide"><div class="panel-heading"><div><h2>Recovery workflow</h2><p>What happens when you run an operation</p></div></div><div class="workflow-list"><div class="workflow-step"><span>1</span><div><strong>Validate target</strong><p>Check the selected service and its incident state.</p></div></div><div class="workflow-step"><span>2</span><div><strong>Apply configured policy</strong><p>Use the backend's retry limit, backoff and circuit-breaker checks.</p></div></div><div class="workflow-step"><span>3</span><div><strong>Verify health</strong><p>Read the resulting status and record the recovery outcome.</p></div></div><div class="workflow-step"><span>4</span><div><strong>Persist outcome</strong><p>Store incident status, strategy and measured elapsed time.</p></div></div></div></div></div>
+          <div class="panel operation-result" id="recoveryResult" hidden><div class="panel-heading"><div><h2>Latest operation</h2><p>Result returned by the ResiliX API</p></div></div><pre id="recoveryResultBody"></pre></div>
+          <div class="panel"><div class="panel-heading"><div><h2>Open incidents</h2><p>Recovery can be run for services with open or failed-recovery incidents.</p></div></div><div class="table-scroll"><table class="data-table"><thead><tr><th>SERVICE</th><th>SEVERITY</th><th>STATUS</th><th>STRATEGY</th><th></th></tr></thead><tbody id="recoveryIncidentBody"><tr><td colspan="5" class="loading-cell">Loading incidents…</td></tr></tbody></table></div></div>
+        </section>
+
+        <section class="page-section" id="metrics">
+          <div class="page-heading"><div><div class="eyebrow">OBSERVABILITY <span class="eyebrow-line"></span></div><h1>Metrics & reports<span class="heading-period">.</span></h1><p class="page-subtitle">Review sampled health signals and recovery outcomes recorded by ResiliX.</p></div><button class="btn btn-secondary" id="metricsRefresh">↻ Refresh metrics</button></div>
+          <div class="stat-grid"><article class="stat-card"><div class="stat-top"><span>Recorded samples</span><span class="stat-symbol blue">⌁</span></div><div class="stat-value" id="metricSamples">—</div><div class="stat-foot">Persisted metric records</div></article><article class="stat-card"><div class="stat-top"><span>Sample availability</span><span class="stat-symbol green">◌</span></div><div class="stat-value" id="metricAvailability">—<small>%</small></div><div class="stat-foot">Estimate from recorded states</div></article><article class="stat-card"><div class="stat-top"><span>Detection precision</span><span class="stat-symbol violet">⌖</span></div><div class="stat-value" id="metricPrecision">—<small>%</small></div><div class="stat-foot">Controlled evaluation counters</div></article><article class="stat-card"><div class="stat-top"><span>Detection recall</span><span class="stat-symbol orange">⌁</span></div><div class="stat-value" id="metricRecall">—<small>%</small></div><div class="stat-foot">Controlled evaluation counters</div></article></div>
+          <div class="dashboard-grid metrics-grid"><article class="panel"><div class="panel-heading"><div><h2>Service signal profile</h2><p>Current latency, error rate and resource pressure</p></div><span class="panel-kicker">CURRENT SNAPSHOT</span></div><div class="signal-list" id="signalList"><div class="loading-panel">Loading metrics…</div></div></article><article class="panel"><div class="panel-heading"><div><h2>Incident outcomes</h2><p>Recorded recovery lifecycle</p></div></div><div class="outcome-summary" id="outcomeSummary"><div class="loading-panel">Loading outcomes…</div></div><div class="outcome-note">Availability and recovery metrics are simulation estimates, not production SLO measurements.</div></article></div>
+          <div class="panel"><div class="panel-heading"><div><h2>Health evaluation</h2><p>Ask the backend to re-check every configured service against its health thresholds.</p></div><span class="panel-kicker">BACKEND ACTION</span></div><div class="evaluation-form"><div class="evaluation-explainer"><span class="quick-action-icon blue-bg">⌁</span><span><strong>Evaluate current service health</strong><small>Uses the configured thresholds and returns the services evaluated.</small></span></div><button class="btn btn-primary" id="runMetricEvaluation" type="button">Evaluate all services</button></div><p class="form-footnote">This operation evaluates service health. It does not record ground-truth labels or calculate new precision/recall samples.</p></div>
+          <div class="panel" style="margin-top:16px"><div class="panel-heading"><div><h2>Detection evaluation sample</h2><p>Compare the known failure condition with the detector result to update TP, FP, TN and FN.</p></div><span class="panel-kicker">TEST DATA</span></div><form id="detectionEvaluationForm" class="stack-form"><label for="expectedFailureInput">Ground truth — was there actually a failure?</label><select id="expectedFailureInput" required><option value="true">Yes — failure existed</option><option value="false">No — service was healthy</option></select><label for="detectedFailureInput">Detector result — did ResiliX detect a failure?</label><select id="detectedFailureInput" required><option value="true">Yes — failure detected</option><option value="false">No — no failure detected</option></select><button class="btn btn-primary btn-wide" id="recordDetectionEvaluation" type="submit">Record evaluation sample</button><p class="form-footnote">Choose the correct pair for your test. Each submission adds one sample; it is not a live automatic accuracy measurement.</p></form></div>
+        </section>
+
+        <footer class="app-footer"><span>RESILIX <span class="footer-dot">•</span> RELIABILITY SIMULATION PLATFORM</span><span>Built for controlled failure analysis <span class="footer-dot">•</span> <span id="footerApi">API: localhost:8080</span></span></footer>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-heading"><div><div class="eyebrow">CONTROLLED OPERATION</div><h2 id="modalTitle">Inject a failure</h2></div><button class="icon-button" id="modalClose" aria-label="Close dialog">×</button></div>
+      <form id="failureForm" class="stack-form"><label for="failureService">Target service</label><select id="failureService" required><option value="">Select a service…</option></select><label for="failureDescription">Incident description</label><input id="failureDescription" maxlength="180" value="Manual failure injection" placeholder="e.g. elevated payment latency"><div class="modal-warning"><span>!</span><p>This creates a simulated incident and calculates its downstream impact. It does not stop a real service.</p></div><div class="modal-actions"><button type="button" class="btn btn-secondary" id="modalCancel">Cancel</button><button type="submit" class="btn btn-danger">Inject failure</button></div></form>
+    </section>
+  </div>
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+  <script src="app.js"></script>
+</body>
+</html>
